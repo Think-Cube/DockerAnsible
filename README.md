@@ -1,3 +1,3 @@
 # Docker Ansible container
 
-[![docker-ansible](https://img.shields.io/badge/spy86-ansible-blue.svg)](https://cloud.docker.com/repository/docker/spy86/ansible) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![docker-ansible](https://img.shields.io/badge/spy86-ansible-blue.svg)](https://cloud.docker.com/repository/docker/spy86/ansible) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Build status](https://dev.azure.com/DevOpsSysOps/Docker/_apis/build/status/Build-docker-ansible)](https://dev.azure.com/DevOpsSysOps/Docker/_build/latest?definitionId=36)
