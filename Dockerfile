@@ -1,5 +1,5 @@
 # Pull base image.
-FROM spy86/python
+FROM python
 
 # Install Ansible.
 RUN pip install ansible
