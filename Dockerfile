@@ -1,11 +1,10 @@
-# Pull base image.
-FROM python
+FROM python:3.7.6-stretch
 
-# Install Ansible.
+RUN pip install pip --upgrade
 RUN pip install ansible
 
-# Define working directory.
-WORKDIR /data
+RUN apt-get update -y && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    sshpass
 
-# Define default command.
-CMD ["bash"]
+WORKDIR /work
