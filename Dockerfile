@@ -1,4 +1,4 @@
-FROM python:3.7.6-stretch
+FROM python:3.7.11-stretch
 
 RUN pip install pip --upgrade
 RUN pip install ansible
