@@ -1,4 +1,4 @@
-FROM python:3.7.11-slim-buster
+FROM python:3.7.12-slim-bullseye
 
 RUN pip install pip --upgrade
 RUN pip install ansible
