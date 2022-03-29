@@ -27,6 +27,8 @@ variables:
     value: ${{parameters.TestBuild}}
   - name: tag
     value: '$(Build.BuildNumber)'
+  - name: image_name
+    value: 'ansible'
 
 
 stages:
@@ -43,7 +45,7 @@ stages:
       displayName: Build an image
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/ansible'
+        repository: 'spy86/$(image_name)'
         command: 'build'
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
@@ -51,7 +53,7 @@ stages:
       displayName: Push an image
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/ansible'
+        repository: 'spy86/$(image_name)'
         command: 'push'
         tags: '$(tag)'
 
@@ -69,7 +71,7 @@ stages:
       displayName: Build an image
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/ansible'
+        repository: 'spy86/$(image_name)'
         command: 'build'
         Dockerfile: '**/Dockerfile'
         tags: 'latest'
@@ -77,7 +79,7 @@ stages:
       displayName: Push an image
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/ansible'
+        repository: 'spy86/$(image_name)'
         command: 'push'
         tags: 'latest'
 
@@ -94,7 +96,7 @@ stages:
       displayName: Build an image
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/ansible'
+        repository: 'spy86/$(image_name)'
         command: 'build'
         Dockerfile: '**/Dockerfile'
         tags: 'latest'
