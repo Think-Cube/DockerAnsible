@@ -31,6 +31,7 @@ variables:
 
 stages:
 - stage: Build
+  condition: eq('${{variables.TestBuild}}', 'false')
   displayName: Build image
   jobs:
   - job: Build
@@ -55,6 +56,7 @@ stages:
         tags: '$(tag)'
 
 - stage: Build_Latest_tag
+  condition: eq('${{variables.TestBuild}}', 'false')
   dependsOn: [Build]
   displayName: Rebuild an latest image
   jobs:
