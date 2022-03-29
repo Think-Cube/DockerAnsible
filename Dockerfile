@@ -1,4 +1,4 @@
-FROM python:3.11.0a6-slim-buster
+FROM debian:11
 
 RUN pip install pip --upgrade
 RUN pip install ansible
