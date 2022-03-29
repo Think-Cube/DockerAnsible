@@ -1,5 +1,14 @@
 name: $(date:yyyyMMdd)$(rev:.r)
 
+parameters:
+- name: TestBuild
+  displayName: 'Test Build ???'
+  type: string
+  default: 'false'
+  values:
+    - true
+    - false
+
 schedules:
 - cron: "0 0 1 * *"
   displayName: Run At 00:00 on day-of-month 1
@@ -14,7 +23,11 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildNumber)'
+  - name: TestBuild
+    value: ${{parameters.TestBuild}}
+  - name: tag
+    value: '$(Build.BuildNumber)'
+
 
 stages:
 - stage: Build
@@ -64,4 +77,22 @@ stages:
         containerRegistry: 'Dockerhub'
         repository: 'spy86/ansible'
         command: 'push'
+        tags: 'latest'
+
+- stage: Test_Build
+  condition: eq('${{variables.TestBuild}}', 'true')
+  displayName: Test Build
+  jobs:
+  - job: Test_Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/ansible'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
         tags: 'latest'
