@@ -1,6 +1,6 @@
 FROM debian:11
 
-RUN apt-get -y install python3-pip
+RUN apt-get -y install pip
 RUN pip install pip --upgrade
 RUN pip install ansible
 
