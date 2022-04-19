@@ -30,7 +30,6 @@ variables:
   - name: image_name
     value: 'ansible'
 
-
 stages:
 - stage: Build
   condition: eq('${{variables.TestBuild}}', 'false')
