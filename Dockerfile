@@ -1,4 +1,4 @@
-FROM debian:11
+FROM debian:12
 
 RUN apt-get update \
     && apt-get install --no-install-recommends -y python3-pip \
