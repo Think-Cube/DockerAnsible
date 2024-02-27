@@ -5,6 +5,9 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  ANSIBLE_CORE_VERSION: 2.16.3
+  ANSIBLE_VERSION: 9.2.0
+  ANSIBLE_LINT: 6.22.2
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,6 +47,10 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+              ANSIBLE_CORE_VERSION=2.16.3
+              ANSIBLE_VERSION=9.2.0
+              ANSIBLE_LINT=6.22.2
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
         env:

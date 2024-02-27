@@ -27,10 +27,16 @@ This repository houses a Dockerfile for creating a Docker image tailored for Ans
 
 The Dockerfile follows these major steps:
 
-1. Update package lists and install Python 3 and Pip.
-2. Upgrade Pip and install Ansible.
-3. Install `sshpass` for SSH password support.
-4. Set the working directory to `/work`.
+1. Update package lists and install required dependencies.
+2. Install and configure Python, Pip, and other necessary tools.
+3. Install specified versions of Ansible, Ansible Core, and Ansible Lint.
+4. Set up the working directory and essential Ansible files.
+
+## Environment Variables
+
+* `ANSIBLE_CORE_VERSION`: Version of Ansible Core.
+* `ANSIBLE_VERSION`: Version of Ansible.
+* `ANSIBLE_LINT`: Version of Ansible Lint.
 
 ## License
 
