@@ -1,0 +1,74 @@
+
+name: $(date:yyyyMMdd)-$(rev:.r)
+
+parameters:
+- name: publish_docker
+  displayName: 'Publish Docker Container ???'
+  type: string
+  default: 'false'
+  values:
+    - true
+    - false
+
+trigger:
+  branches:
+    include:
+    - refs/heads/master
+    - refs/heads/main
+
+resources:
+  repositories:
+    - repository: self
+
+variables:
+  - group: GITHUB-PAT-TOKEN
+  - name: PUBLISH_DOCKER
+    value: ${{parameters.publish_docker}}
+  - name: VM_IMAGE
+    value: ubuntu-latest
+  - name: IMAGE_NAME
+    value: "think-cube/dockeransible"
+
+pool:
+  vmImage: $(VM_IMAGE)
+
+stages:
+- stage: TestBuild
+  condition: eq('${{parameters.publish_docker}}', 'false')
+  displayName: "Build Docker Image"
+  jobs:
+  - job: Build
+    steps:
+    - script: echo "##vso[task.setvariable variable=IMAGE_TAG]$(date +%Y%m%d)"
+      displayName: "Set IMAGE_TAG variable"
+
+    - task: Docker@2
+      inputs:
+        repository: '$(IMAGE_NAME)'
+        command: 'build'
+        Dockerfile: 'Dockerfile'
+        tags: '$(IMAGE_TAG)'
+
+- stage: BuildAndPush
+  condition: eq('${{parameters.publish_docker}}', 'true')  
+  displayName: "Push Docker Image"
+  jobs:
+  - job: Push
+    steps:
+    - checkout: self
+    - script: echo "##vso[task.setvariable variable=IMAGE_TAG]$(date +%Y%m%d)"
+      displayName: "Set IMAGE_TAG variable"    
+    - task: Docker@2
+      inputs:
+        command: 'login'
+        containerRegistry: 'ghcr.io'
+        username: '$(USERNAME)'
+        password: '$(TOKEN-FOR-GHCR)'
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'ghcr.io'
+        repository: '$(IMAGE_NAME)'
+        command: 'buildAndPush'
+        Dockerfile: 'Dockerfile'
+        tags: '$(IMAGE_TAG)'
