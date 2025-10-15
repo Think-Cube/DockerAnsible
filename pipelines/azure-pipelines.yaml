@@ -45,7 +45,7 @@ stages:
       inputs:
         repository: '$(IMAGE_NAME)'
         command: 'build'
-        Dockerfile: 'docker/Dockerfile'
+        Dockerfile: 'Dockerfile'
         tags: '$(IMAGE_TAG)'
 
 - stage: BuildAndPush
@@ -63,5 +63,5 @@ stages:
         containerRegistry: 'DockerHub_thinkcubedev'
         repository: '$(IMAGE_NAME)'
         command: 'buildAndPush'
-        Dockerfile: 'docker/Dockerfile'
+        Dockerfile: 'Dockerfile'
         tags: '$(IMAGE_TAG)'
