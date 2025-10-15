@@ -1,4 +1,3 @@
-
 name: $(date:yyyyMMdd)-$(rev:.r)
 
 parameters:
@@ -27,7 +26,7 @@ variables:
   - name: VM_IMAGE
     value: ubuntu-latest
   - name: IMAGE_NAME
-    value: "think-cube/dockeransible"
+    value: "thinkcubedev/ansible"
 
 pool:
   vmImage: $(VM_IMAGE)
@@ -57,17 +56,11 @@ stages:
     steps:
     - checkout: self
     - script: echo "##vso[task.setvariable variable=IMAGE_TAG]$(date +%Y%m%d)"
-      displayName: "Set IMAGE_TAG variable"    
-    - task: Docker@2
-      inputs:
-        command: 'login'
-        containerRegistry: 'ghcr.io'
-        username: '$(USERNAME)'
-        password: '$(TOKEN-FOR-GHCR)'
+      displayName: "Set IMAGE_TAG variable"
 
     - task: Docker@2
       inputs:
-        containerRegistry: 'ghcr.io'
+        containerRegistry: 'DockerHub_thinkcubedev'
         repository: '$(IMAGE_NAME)'
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'

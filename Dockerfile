@@ -1,25 +1,35 @@
-FROM ubuntu:22.04
+FROM ubuntu:25.04
 
-ARG ANSIBLE_CORE_VERSION
-ARG ANSIBLE_VERSION
-ARG ANSIBLE_LINT
-ENV ANSIBLE_CORE_VERSION ${ANSIBLE_CORE_VERSION}
-ENV ANSIBLE_VERSION ${ANSIBLE_VERSION}
-ENV ANSIBLE_LINT ${ANSIBLE_LINT}
+ARG ANSIBLE_CORE_VERSION=2.19.3
+ARG ANSIBLE_VERSION=12.1.0
+ARG ANSIBLE_LINT=6.11.0
+
+ENV ANSIBLE_CORE_VERSION=${ANSIBLE_CORE_VERSION} \
+    ANSIBLE_VERSION=${ANSIBLE_VERSION} \
+    ANSIBLE_LINT=${ANSIBLE_LINT}
 
 LABEL maintainer="contact@thinkcube.dev"
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get install -y gnupg2 python3-pip sshpass git openssh-client && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        python3-venv \
+        python3-pip \
+        gnupg2 \
+        sshpass \
+        git \
+        openssh-client && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install --upgrade pip cffi && \
-    pip3 install ansible-core==${ANSIBLE_CORE_VERSION} && \
-    pip3 install ansible==${ANSIBLE_VERSION} ansible-lint==${ANSIBLE_LINT} && \
-    pip3 install mitogen jmespath && \
-    pip install --upgrade pywinrm && \
+RUN python3 -m venv /opt/ansible-env && \
+    /opt/ansible-env/bin/pip install --upgrade pip cffi && \
+    /opt/ansible-env/bin/pip install \
+        "ansible-core==${ANSIBLE_CORE_VERSION}" \
+        "ansible==${ANSIBLE_VERSION}" \
+        "ansible-lint==${ANSIBLE_LINT}" \
+        mitogen jmespath pywinrm && \
     rm -rf /root/.cache/pip
+
+ENV PATH="/opt/ansible-env/bin:$PATH"
 
 RUN mkdir /ansible && \
     mkdir -p /etc/ansible && \
@@ -27,4 +37,4 @@ RUN mkdir /ansible && \
 
 WORKDIR /ansible
 
-CMD [ "ansible-playbook", "--version" ]
+CMD ["ansible-playbook", "--version"]
