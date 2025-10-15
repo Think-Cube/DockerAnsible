@@ -1,16 +1,23 @@
 FROM ubuntu:25.04
 
-ARG ANSIBLE_CORE_VERSION
-ARG ANSIBLE_VERSION
-ARG ANSIBLE_LINT
+ARG ANSIBLE_CORE_VERSION=2.19.3
+ARG ANSIBLE_VERSION=12.1.0
+ARG ANSIBLE_LINT=6.11.0
 
 ENV ANSIBLE_CORE_VERSION=${ANSIBLE_CORE_VERSION} \
     ANSIBLE_VERSION=${ANSIBLE_VERSION} \
     ANSIBLE_LINT=${ANSIBLE_LINT}
 
+LABEL maintainer="contact@thinkcube.dev"
+
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        python3-venv python3-pip gnupg2 sshpass git openssh-client && \
+        python3-venv \
+        python3-pip \
+        gnupg2 \
+        sshpass \
+        git \
+        openssh-client && \
     rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m venv /opt/ansible-env && \
@@ -24,7 +31,10 @@ RUN python3 -m venv /opt/ansible-env && \
 
 ENV PATH="/opt/ansible-env/bin:$PATH"
 
-RUN mkdir /ansible && mkdir -p /etc/ansible && echo 'localhost' > /etc/ansible/hosts
+RUN mkdir /ansible && \
+    mkdir -p /etc/ansible && \
+    echo 'localhost' > /etc/ansible/hosts
 
 WORKDIR /ansible
+
 CMD ["ansible-playbook", "--version"]
